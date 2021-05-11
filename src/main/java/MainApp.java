@@ -1,7 +1,12 @@
 public class MainApp {
     public static void main(String[] args) {
         firstMethod();
-        secondMethod();
+        try {
+            secondMethod();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -25,7 +30,7 @@ public class MainApp {
     }
 
 
-    public static void secondMethod() {
+    public static void secondMethod() throws InterruptedException {
 
         final int size = 10000000;
         final int h = size / 2;
@@ -56,7 +61,7 @@ public class MainApp {
         Thread thread1 = new Thread(new Runnable() {
             @Override
             public void run() {
-                for (int i = 0; i < a2.length; i++){
+                for (int i = 0; i < a2.length; i++) {
                     a2[i] = (float) (arr[i] * Math.sin(0.2f + i / 5) * Math.cos(0.2f + i / 5) * Math.cos(0.4f + i / 2));
                 }
             }
@@ -64,11 +69,13 @@ public class MainApp {
 
         thread.start();
         thread1.start();
+        thread1.join();
+
 
         System.arraycopy(a1, 0, arr, 0, h);
         System.arraycopy(a2, 0, arr, h, h);
 
-        System.out.println("Время выполнения второго метода в миллисекундах: " + (System.currentTimeMillis()-timer));
+        System.out.println("Время выполнения второго метода в миллисекундах: " + (System.currentTimeMillis() - timer));
 
 
     }
